@@ -1,53 +1,89 @@
-let accountName = "Devagya";
-let balance = 1000;
+let walletBalance = 100000;
 
-let transactions = [];
+let portfolio = {
+    Bitcoin: 0,
+    Ethereum: 0,
+    Solana: 0
+};
 
-function showMenu() {
+let prices = {
+    Bitcoin: 50000,
+    Ethereum: 3000,
+    Solana: 150
+};
 
-    console.log("====== BANK MENU ======");
-    console.log("1. Check Balance");
-    console.log("2. Deposit");
-    console.log("3. Withdraw");
-    console.log("4. History");
-    console.log("=======================");
+let history = [];
+
+function showPortfolio() {
+
+    console.log("===== PORTFOLIO =====");
+
+    console.log("Wallet Balance: ₹" + walletBalance);
+
+    console.log("Bitcoin:", portfolio.Bitcoin);
+    console.log("Ethereum:", portfolio.Ethereum);
+    console.log("Solana:", portfolio.Solana);
 }
 
-function deposit(amount) {
+function buyCoin(coin, quantity) {
 
-    balance += amount;
+    let cost = prices[coin] * quantity;
 
-    transactions.push(
-        `Deposited ₹${amount}`
-    );
+    if(cost <= walletBalance) {
 
-    console.log(`₹${amount} Added`);
-}
+        walletBalance -= cost;
 
-function withdraw(amount) {
+        portfolio[coin] += quantity;
 
-    if (amount <= balance) {
-
-        balance -= amount;
-
-        transactions.push(
-            `Withdraw ₹${amount}`
+        history.push(
+            `Bought ${quantity} ${coin}`
         );
 
-        console.log(`₹${amount} Withdrawn`);
+        console.log(`Successfully Bought ${coin}`);
 
     } else {
 
-        console.log("Insufficient Balance");
+        console.log("Not Enough Balance");
+
     }
 
 }
 
-function checkBalance() {
+function sellCoin(coin, quantity) {
 
-    console.log(
-        `${accountName} Balance: ₹${balance}`
-    );
+    if(quantity <= portfolio[coin]) {
+
+        let value = prices[coin] * quantity;
+
+        walletBalance += value;
+
+        portfolio[coin] -= quantity;
+
+        history.push(
+            `Sold ${quantity} ${coin}`
+        );
+
+        console.log(`Successfully Sold ${coin}`);
+
+    } else {
+
+        console.log("Not Enough Coins");
+
+    }
+
+}
+
+function totalValue() {
+
+    let total = walletBalance;
+
+    total += portfolio.Bitcoin * prices.Bitcoin;
+
+    total += portfolio.Ethereum * prices.Ethereum;
+
+    total += portfolio.Solana * prices.Solana;
+
+    console.log("Total Net Worth: ₹" + total);
 
 }
 
@@ -55,34 +91,24 @@ function showHistory() {
 
     console.log("===== HISTORY =====");
 
-    if (transactions.length === 0) {
+    for(let i = 0; i < history.length; i++) {
 
-        console.log("No Transactions");
-
-    } else {
-
-        for (let i = 0; i < transactions.length; i++) {
-
-            console.log(
-                `${i + 1}. ${transactions[i]}`
-            );
-
-        }
+        console.log(
+            `${i + 1}. ${history[i]}`
+        );
 
     }
 
 }
 
-// Program Start
+buyCoin("Bitcoin",1);
 
-showMenu();
+buyCoin("Ethereum",2);
 
-deposit(500);
+sellCoin("Ethereum",1);
 
-withdraw(200);
+showPortfolio();
 
-withdraw(5000);
-
-checkBalance();
+totalValue();
 
 showHistory();
