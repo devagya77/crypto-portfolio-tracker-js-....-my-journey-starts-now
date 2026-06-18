@@ -1,4 +1,5 @@
 # crypto-portfolio-tracker-js-....-my-journey-starts-now
+it is a smart banking system
 My first JavaScript crypto portfolio tracker project. jo
 # Crypto Portfolio Tracker
 
